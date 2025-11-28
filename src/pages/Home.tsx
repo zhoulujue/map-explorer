@@ -12,12 +12,7 @@ export default function Home() {
   const { showList, setShowList } = useStore();
   const [searchQuery, setSearchQuery] = useState('');
   const { toggleTheme, isDark } = useTheme();
-  const { 
-    user, 
-    isAuthenticated, 
-    selectedBusiness,
-    setUser 
-  } = useStore();
+  const { selectedBusiness, setUser } = useStore();
   
 
   useEffect(() => {

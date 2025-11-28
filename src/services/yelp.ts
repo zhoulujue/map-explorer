@@ -1,7 +1,6 @@
 import type { Business, BusinessSearchResponse, ReviewResponse } from '@/types';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const YELP_API_KEY = import.meta.env.VITE_YELP_API_KEY;
 const YELP_API_BASE = 'https://api.yelp.com/v3';
 
 class YelpService {

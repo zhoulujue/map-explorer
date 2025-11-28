@@ -27,15 +27,7 @@ export default function PlaceCard({ business, onClick }: PlaceCardProps) {
     return business.categories?.[0]?.title || '商家';
   };
 
-  const formatPrice = (price: string) => {
-    const priceMap: Record<string, string> = {
-      '$': '经济实惠',
-      '$$': '中等消费',
-      '$$$': '高端消费',
-      '$$$$': '奢华消费',
-    };
-    return priceMap[price] || '价格适中';
-  };
+  
 
   const distance = (() => {
     const c = mapCenter;
