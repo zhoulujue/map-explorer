@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 基本的暗黑模式颜色变量 */
+@layer base {
+  :root {
+    --color-background: #ffffff;
+    --color-text: #111827;
+    --color-text-secondary: #4b5563;
+    --color-border: #e5e7eb;
+    --color-card: #ffffff;
+    --color-primary: #2563eb;
+    --color-primary-light: #dbeafe;
+    --color-error: #dc2626;
+    --color-success: #10b981;
+  }
+
+  .dark {
+    --color-background: #111827;
+    --color-text: #f9fafb;
+    --color-text-secondary: #d1d5db;
+    --color-border: #374151;
+    --color-card: #1f2937;
+    --color-primary: #3b82f6;
+    --color-primary-light: #1e3a8a;
+    --color-error: #ef4444;
+    --color-success: #34d399;
+  }
+
+  body {
+    @apply bg-background text-text;
+    margin: 0;
+  }
+}
+
+/* 确保暗黑模式下的过渡效果平滑 */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+/* 移动端优化 */
+@media (max-width: 640px) {
+  html {
+    touch-action: manipulation;
+  }
+  
+  button, a, input {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* 辅助类 */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
