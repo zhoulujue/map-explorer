@@ -98,7 +98,7 @@ export default function Search() {
         }
 
         let searchResults: Business[] = [];
-        if (import.meta.env.VITE_YELP_API_KEY) {
+        if (import.meta.env.VITE_YELP_API_KEY && import.meta.env.VITE_BACKEND_URL) {
           searchResults = await yelpService.searchBusinesses(
             latitude,
             longitude,
