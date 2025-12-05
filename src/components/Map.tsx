@@ -52,10 +52,13 @@ export default function Map() {
 
         // Initialize map
         await mapService.initializeMap(mapContainerRef.current!, mapCenter);
-        applyCuteStyle(mapService.getMap());
-        const zipcodeUrl = import.meta.env.VITE_ZIPCODES_GEOJSON_URL as string | undefined;
-        if (zipcodeUrl) {
-          await mapService.loadZipcodeGeoJson(zipcodeUrl);
+        const enableCute = import.meta.env.VITE_ENABLE_CUTE_MAP === 'true';
+        if (enableCute) {
+          applyCuteStyle(mapService.getMap());
+          const zipcodeUrl = import.meta.env.VITE_ZIPCODES_GEOJSON_URL as string | undefined;
+          if (zipcodeUrl) {
+            await mapService.loadZipcodeGeoJson(zipcodeUrl);
+          }
         }
 
         // Set up event listeners

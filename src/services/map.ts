@@ -126,13 +126,28 @@ export class MapService {
     try {
       this.map.data.loadGeoJson(url);
       this.dataLayerLoaded = true;
-      this.map.data.setStyle(() => ({
-        strokeColor: '#ff9db5',
+      const pastel = ['#ffdce5','#ffecc6','#d9f2ff','#e7e0ff','#cffff1','#ffe8d6','#f1f7b5','#e2f0cb']
+      const propKey = (typeof import.meta !== 'undefined' ? (import.meta as any).env?.VITE_ZIPCODE_PROP_KEY : undefined) || 'ZCTA5CE10'
+      const pickColor = (feature: any) => {
+        const key = feature.getProperty(propKey) || feature.getProperty('zipcode') || feature.getProperty('postalcode') || feature.getProperty('name') || ''
+        let hash = 0
+        const s = String(key)
+        for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0
+        return pastel[hash % pastel.length]
+      }
+      this.map.data.setStyle((feature: any) => ({
+        strokeColor: '#7d6b7d',
         strokeOpacity: 1,
-        strokeWeight: 2,
-        fillColor: '#ffe7ef',
-        fillOpacity: 0.6,
+        strokeWeight: 3,
+        fillColor: pickColor(feature),
+        fillOpacity: 0.75,
       }));
+      this.map.data.addListener('mouseover', (e: any) => {
+        this.map.data.overrideStyle(e.feature, { strokeWeight: 5, fillOpacity: 0.85 })
+      })
+      this.map.data.addListener('mouseout', (e: any) => {
+        this.map.data.revertStyle(e.feature)
+      })
     } catch (e) {
       console.error('Error loading zipcode geojson:', e);
     }
