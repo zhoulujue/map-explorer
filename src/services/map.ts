@@ -16,6 +16,7 @@ export class MapService {
   private annotationSelectCallback: ((annotation: any) => void) | null = null;
   private overlayHelper: any = null;
   private dataLayerLoaded = false;
+  // flags removed to satisfy noUnusedLocals
 
   async initializeMap(container: HTMLElement, center: MapCoordinates, zoom: number = 14) {
     if (!window.google || !window.google.maps) {
@@ -157,6 +158,66 @@ export class MapService {
     if (!this.map || !this.isInitialized || !this.dataLayerLoaded) return;
     this.map.data.forEach((f: any) => this.map.data.remove(f));
     this.dataLayerLoaded = false;
+  }
+
+  async loadMajorRoads(url: string) {
+    if (!this.map || !this.isInitialized) {
+      throw new Error('Map not initialized');
+    }
+    try {
+      const layer = new window.google.maps.Data({ map: this.map });
+      await layer.loadGeoJson(url);
+      layer.setStyle((feature: any) => {
+        const kind = feature.getProperty('type') || 'arterial'
+        const color = kind === 'highway' ? '#5b7ae6' : '#87a8ff'
+        return { strokeColor: color, strokeOpacity: 1, strokeWeight: 4 }
+      })
+      ;(this as any)._roadsLayer = layer
+      
+    } catch (e) {
+      console.error('Error loading roads geojson:', e);
+    }
+  }
+
+  clearMajorRoads() {
+    const layer = (this as any)._roadsLayer
+    if (layer) {
+      layer.setMap(null)
+      
+      ;(this as any)._roadsLayer = null
+    }
+  }
+
+  async loadLandmarks(url: string) {
+    if (!this.map || !this.isInitialized) {
+      throw new Error('Map not initialized');
+    }
+    try {
+      const layer = new window.google.maps.Data({ map: this.map })
+      await layer.loadGeoJson(url)
+      layer.setStyle((feature: any) => {
+        const emoji = feature.getProperty('emoji') || '📍'
+        return {
+          icon: {
+            url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='24'>${emoji}</text></svg>`)}`,
+            scaledSize: new window.google.maps.Size(36, 36),
+          }
+        }
+      })
+      ;(this as any)._landmarksLayer = layer
+      
+    } catch (e) {
+      console.error('Error loading landmarks geojson:', e)
+    }
+  }
+
+  clearLandmarks() {
+    const layer = (this as any)._landmarksLayer
+    if (layer) {
+      layer.setMap(null)
+      
+      ;(this as any)._landmarksLayer = null
+    }
   }
 
   getVisibleRegion(): { north: number; south: number; east: number; west: number } {

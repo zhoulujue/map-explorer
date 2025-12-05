@@ -1,16 +1,13 @@
 export const cuteMapStyle = [
   { featureType: 'poi', stylers: [{ visibility: 'off' }] },
   { featureType: 'transit', stylers: [{ visibility: 'off' }] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{ visibility: 'off' }] },
-  { featureType: 'road.local', stylers: [{ visibility: 'off' }] },
-  { featureType: 'road.arterial', stylers: [{ visibility: 'off' }] },
-  { featureType: 'road.highway', stylers: [{ visibility: 'off' }] },
-  { featureType: 'administrative', elementType: 'labels', stylers: [{ visibility: 'off' }] },
-  { featureType: 'administrative', elementType: 'geometry', stylers: [{ visibility: 'off' }] },
   { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#a3d5ff' }] },
-  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#fff9e6' }] },
-  { featureType: 'all', elementType: 'labels.text.fill', stylers: [{ visibility: 'off' }] },
-  { featureType: 'all', elementType: 'labels.text.stroke', stylers: [{ visibility: 'off' }] },
+  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#fef6e4' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#d0d7ff' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#9eb6ff' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#5b7ae6' }] },
+  { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] },
+  { featureType: 'administrative', elementType: 'labels', stylers: [{ visibility: 'off' }] },
 ]
 
 export function applyCuteStyle(map: any) {

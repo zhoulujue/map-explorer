@@ -59,6 +59,14 @@ export default function Map() {
           if (zipcodeUrl) {
             await mapService.loadZipcodeGeoJson(zipcodeUrl);
           }
+          const roadsUrl = import.meta.env.VITE_MAJOR_ROADS_GEOJSON_URL as string | undefined;
+          if (roadsUrl) {
+            await mapService.loadMajorRoads(roadsUrl);
+          }
+          const landmarksUrl = import.meta.env.VITE_LANDMARKS_GEOJSON_URL as string | undefined;
+          if (landmarksUrl) {
+            await mapService.loadLandmarks(landmarksUrl);
+          }
         }
 
         // Set up event listeners
