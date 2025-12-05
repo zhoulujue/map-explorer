@@ -15,6 +15,7 @@ export class MapService {
   private isInitialized = false;
   private annotationSelectCallback: ((annotation: any) => void) | null = null;
   private overlayHelper: any = null;
+  private dataLayerLoaded = false;
 
   async initializeMap(container: HTMLElement, center: MapCoordinates, zoom: number = 14) {
     if (!window.google || !window.google.maps) {
@@ -109,6 +110,38 @@ export class MapService {
 
   getMap(): any {
     return this.map;
+  }
+
+  setMapStyle(styles: any[]) {
+    if (!this.map || !this.isInitialized) {
+      throw new Error('Map not initialized');
+    }
+    this.map.setOptions({ styles });
+  }
+
+  async loadZipcodeGeoJson(url: string) {
+    if (!this.map || !this.isInitialized) {
+      throw new Error('Map not initialized');
+    }
+    try {
+      this.map.data.loadGeoJson(url);
+      this.dataLayerLoaded = true;
+      this.map.data.setStyle(() => ({
+        strokeColor: '#ff9db5',
+        strokeOpacity: 1,
+        strokeWeight: 2,
+        fillColor: '#ffe7ef',
+        fillOpacity: 0.6,
+      }));
+    } catch (e) {
+      console.error('Error loading zipcode geojson:', e);
+    }
+  }
+
+  clearZipcodeLayer() {
+    if (!this.map || !this.isInitialized || !this.dataLayerLoaded) return;
+    this.map.data.forEach((f: any) => this.map.data.remove(f));
+    this.dataLayerLoaded = false;
   }
 
   getVisibleRegion(): { north: number; south: number; east: number; west: number } {

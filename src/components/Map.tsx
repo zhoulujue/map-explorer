@@ -9,6 +9,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { mapCategoryToPlacesType } from '@/lib/category';
 import { debounce } from '@/lib/utils';
 import { yelpService } from '@/services/yelp';
+import { applyCuteStyle } from '@/services/mapStyle';
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -51,6 +52,11 @@ export default function Map() {
 
         // Initialize map
         await mapService.initializeMap(mapContainerRef.current!, mapCenter);
+        applyCuteStyle(mapService.getMap());
+        const zipcodeUrl = import.meta.env.VITE_ZIPCODES_GEOJSON_URL as string | undefined;
+        if (zipcodeUrl) {
+          await mapService.loadZipcodeGeoJson(zipcodeUrl);
+        }
 
         // Set up event listeners
         mapService.onAnnotationSelect((annotation) => {
