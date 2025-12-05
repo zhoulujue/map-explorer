@@ -51,6 +51,23 @@ app.get('/api/yelp/businesses/:id/reviews', async (req, res) => {
 // Supabase routes
 app.use('/api', supabaseRouter)
 
+// Overpass proxy
+app.post('/api/overpass', async (req, res) => {
+  const query = req.body?.query || ''
+  if (!query) return res.status(400).json({ error: 'Missing query' })
+  try {
+    const resp = await fetch('https://overpass-api.de/api/interpreter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ data: query }).toString(),
+    })
+    const json = await resp.json()
+    res.status(200).json(json)
+  } catch (e) {
+    res.status(500).json({ error: String(e) })
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Backend proxy listening on http://localhost:${PORT}`)
 })

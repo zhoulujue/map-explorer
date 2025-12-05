@@ -160,6 +160,43 @@ export class MapService {
     this.dataLayerLoaded = false;
   }
 
+  async loadZipcodesFromOverpass(bounds: { north: number; south: number; east: number; west: number }) {
+    if (!this.map || !this.isInitialized) {
+      throw new Error('Map not initialized');
+    }
+    try {
+      const { fetchZipcodesGeoJSON } = await import('@/services/overpass')
+      const geojson = await fetchZipcodesGeoJSON(bounds)
+      this.map.data.addGeoJson(geojson)
+      this.dataLayerLoaded = true
+
+      const pastel = ['#ffdce5','#ffecc6','#d9f2ff','#e7e0ff','#cffff1','#ffe8d6','#f1f7b5','#e2f0cb']
+      const propKey = (typeof import.meta !== 'undefined' ? (import.meta as any).env?.VITE_ZIPCODE_PROP_KEY : undefined) || 'postal_code'
+      const pickColor = (feature: any) => {
+        const key = feature.getProperty(propKey) || feature.getProperty('zipcode') || feature.getProperty('postal_code') || feature.getProperty('name') || ''
+        let hash = 0
+        const s = String(key)
+        for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0
+        return pastel[hash % pastel.length]
+      }
+      this.map.data.setStyle((feature: any) => ({
+        strokeColor: '#7d6b7d',
+        strokeOpacity: 1,
+        strokeWeight: 3,
+        fillColor: pickColor(feature),
+        fillOpacity: 0.75,
+      }))
+      this.map.data.addListener('mouseover', (e: any) => {
+        this.map.data.overrideStyle(e.feature, { strokeWeight: 5, fillOpacity: 0.85 })
+      })
+      this.map.data.addListener('mouseout', (e: any) => {
+        this.map.data.revertStyle(e.feature)
+      })
+    } catch (e) {
+      console.error('Error loading zipcode via overpass:', e)
+    }
+  }
+
   async loadMajorRoads(url: string) {
     if (!this.map || !this.isInitialized) {
       throw new Error('Map not initialized');

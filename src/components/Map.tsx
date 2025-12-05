@@ -58,6 +58,9 @@ export default function Map() {
           const zipcodeUrl = import.meta.env.VITE_ZIPCODES_GEOJSON_URL as string | undefined;
           if (zipcodeUrl) {
             await mapService.loadZipcodeGeoJson(zipcodeUrl);
+          } else {
+            const region = mapService.getVisibleRegion();
+            await mapService.loadZipcodesFromOverpass(region);
           }
           const roadsUrl = import.meta.env.VITE_MAJOR_ROADS_GEOJSON_URL as string | undefined;
           if (roadsUrl) {
