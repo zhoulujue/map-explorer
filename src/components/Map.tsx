@@ -103,11 +103,12 @@ export default function Map() {
         }
       } else if (backend && backend.trim().length > 0) {
         const cats = (() => {
-          if (activeCategory === 'all') return ['restaurants', 'hotels'];
-          if (activeCategory?.toLowerCase().includes('food')) return ['restaurants'];
-          if (activeCategory?.toLowerCase().includes('hotel')) return ['hotels'];
-          if (activeCategory?.toLowerCase().includes('bar')) return ['bars'];
-          if (activeCategory?.toLowerCase().includes('cafe')) return ['coffee'];
+          const key = activeCategory?.toLowerCase() || 'all'
+          if (key === 'all') return ['restaurants', 'hotels'];
+          if (key.includes('food') || key.includes('f&b')) return ['restaurants'];
+          if (key.includes('hotel')) return ['hotels'];
+          if (key.includes('bar')) return ['bars'];
+          if (key.includes('cafe')) return ['coffee'];
           return ['restaurants'];
         })();
         const radius = hasMap
@@ -181,7 +182,7 @@ export default function Map() {
       <div ref={mapContainerRef} className="h-full w-full" />
       {/* Category Chips */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center space-x-2">
-        {['All','Food & drink','Travel','Hotels','Leisure','Cafe','Bar','Museum','Park','Shopping'].map((cat) => (
+        {['All','F&B','Travel','Hotels','Leisure','Cafe','Bar','Museum','Park','Shopping'].map((cat) => (
           <motion.button
             key={cat}
             onClick={() => {
@@ -193,7 +194,7 @@ export default function Map() {
             whileTap={{ scale: 0.96 }}
           >
             <span>
-              {cat === 'Food & drink' ? '🍽️' : cat === 'Travel' ? '🧳' : cat === 'Hotels' ? '🏨' : cat === 'Leisure' ? '🎡' : cat === 'Cafe' ? '☕' : cat === 'Bar' ? '🍺' : cat === 'Museum' ? '🏛️' : cat === 'Park' ? '🌳' : cat === 'Shopping' ? '🛍️' : '🗂️'}
+              {cat === 'F&B' ? '🍽️' : cat === 'Travel' ? '🧳' : cat === 'Hotels' ? '🏨' : cat === 'Leisure' ? '🎡' : cat === 'Cafe' ? '☕' : cat === 'Bar' ? '🍺' : cat === 'Museum' ? '🏛️' : cat === 'Park' ? '🌳' : cat === 'Shopping' ? '🛍️' : '🗂️'}
             </span>
             <span>{cat}</span>
           </motion.button>

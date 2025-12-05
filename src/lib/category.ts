@@ -1,7 +1,7 @@
 export function mapCategoryToPlacesType(cat?: string): string | undefined {
   const key = (cat || 'all').toLowerCase()
   if (key === 'all') return undefined
-  if (key.includes('food')) return 'restaurant'
+  if (key.includes('food') || key.includes('f&b')) return 'restaurant'
   if (key.includes('hotel')) return 'lodging'
   if (key.includes('leisure')) return 'tourist_attraction'
   if (key.includes('travel')) return 'travel_agency'
